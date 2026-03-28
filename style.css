@@ -183,3 +183,22 @@ p { font-size: 18px; color: #aaa; margin-bottom: 40px; }
     cursor: pointer;
     border-radius: 4px;
 }
+
+/* Стили специально для таблицы админа */
+#admin-table-body td {
+    color: #000000 !important; /* Принудительно черный цвет */
+    background-color: #ffffff !important; /* Принудительно белый фон для ячеек */
+    border: 1px solid #dddddd;
+    padding: 10px;
+}
+
+#admin-table-body div {
+    color: #000000 !important; /* Для текста внутри блоков мотивации */
+}
+
+/* Заголовки таблицы тоже сделаем читаемыми */
+.admin-table th {
+    color: #000000;
+    background-color: #f0f0f0;
+    padding: 10px;
+}

@@ -293,16 +293,23 @@ function loadAdminData() {
 
             snapshot.forEach((doc) => {
                 const app = doc.data();
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${app.userName || 'Без имени'}</td>
-                        <td>${app.program || '—'}</td>
-                        <td><div style="font-size:11px">${app.motivation || '...'}</div></td>
-                        <td><span class="ai-score-badge">${app.aiScore || 0}/100</span></td>
-                        <td><input type="number" id="input-${doc.id}" value="${app.commissionScore || ''}" style="width:50px"></td>
-                        <td><button class="save-btn" onclick="saveScore('${doc.id}')">OK</button></td>
-                    </tr>
-                `;
+                // Внутри функции loadAdminData, там где tbody.innerHTML += ...
+tbody.innerHTML += `
+    <tr style="background-color: white !important; color: black !important;">
+        <td style="color: black !important;">${name}</td>
+        <td style="color: black !important;">${prog}</td>
+        <td style="color: black !important;">
+            <div style="color: black !important; max-height:60px; overflow:auto;">
+                ${mot}
+            </div>
+        </td>
+        <td style="color: black !important;">${ai}/100</td>
+        <td><input type="number" id="input-${id}" value="${data.commissionScore || ''}" style="color: black !important; width:50px;"></td>
+        <td>
+            <button class="save-btn" onclick="saveScore('${id}')">OK</button>
+        </td>
+    </tr>
+`;
             });
             console.log("Данные успешно подгружены!");
         }, (error) => {
@@ -578,34 +585,34 @@ function loadAdminData() {
         }
 
         snapshot.forEach((doc) => {
-            const data = doc.data();
-            const id = doc.id;
+    const data = doc.data();
+    const id = doc.id;
 
-            // Формируем строку таблицы
-            tbody.innerHTML += `
-                <tr>
-                    <td>${data.userName || 'Аноним'}</td>
-                    <td>${data.program || 'Не выбрана'}</td>
-                    <td>
-                        <div style="max-height: 50px; overflow-y: auto; font-size: 12px; max-width: 250px;">
-                            ${data.motivation || 'Нет текста'}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="ai-score-badge">${data.aiScore || 0}/100</span>
-                    </td>
-                    <td>
-                        <input type="number" id="score-${id}" 
-                               value="${data.commissionScore || ''}" 
-                               style="width: 50px; padding: 5px;" 
-                               placeholder="0">
-                    </td>
-                    <td>
-                        <button class="save-btn" onclick="saveScore('${id}')">Сохранить</button>
-                    </td>
-                </tr>
-            `;
-        });
+    // ВНИМАНИЕ: Проверь, чтобы названия справа (data.userName) 
+    // в точности совпадали с тем, что ты видишь в консоли Firebase!
+    tbody.innerHTML += `
+        <tr style="background: white;">
+            <td style="color: black !important;">${data.userName || 'Пусто'}</td>
+            <td style="color: black !important;">${data.program || '—'}</td>
+            <td style="color: black !important;">
+                <div style="max-height:60px; overflow:auto; color: black;">
+                    ${data.motivation || 'Нет описания'}
+                </div>
+            </td>
+            <td style="color: black;">
+                <span class="ai-score-badge">${data.aiScore || 0}/100</span>
+            </td>
+            <td>
+                <input type="number" id="input-${id}" 
+                       value="${data.commissionScore || ''}" 
+                       style="width:50px; color: black; border: 1px solid #ccc;">
+            </td>
+            <td>
+                <button class="save-btn" onclick="saveScore('${id}')">OK</button>
+            </td>
+        </tr>
+    `;
+});
     }, (error) => {
         console.error("Ошибка Firestore:", error);
         tbody.innerHTML = `<tr><td colspan='6' style="color:red">Ошибка доступа: ${error.message}</td></tr>`;
@@ -626,4 +633,10 @@ function saveScore(docId) {
         console.error("Ошибка обновления:", error);
         alert("Не удалось сохранить балл.");
     });
+}
+
+function deleteApp(id) {
+    if(confirm("Удалить эту заявку?")) {
+        db.collection("applications").doc(id).delete();
+    }
 }
