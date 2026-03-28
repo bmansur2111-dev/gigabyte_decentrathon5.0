@@ -1,10 +1,53 @@
+let currentUser = JSON.parse(localStorage.getItem('user')) || null;
 const pages = {
+    // Добавь это в объект pages
+admin: `
+    <section class="container">
+        <h1 class="huge-title">Панель управления</h1>
+        <p>Список всех заявок команды GIGABYTE:</p>
+        <div id="admin-list" class="admin-grid">
+            <p>Загрузка данных...</p>
+        </div>
+    </section>
+`,
+    auth: `
+        <section class="container auth-page">
+            <h1 class="huge-title">Регистрация</h1>
+            <div class="auth-form">
+                <input type="text" id="reg-name" placeholder="Ваше имя">
+                <input type="email" id="reg-email" placeholder="Email">
+                <button class="main-button" onclick="handleRegister()">Создать аккаунт</button>
+                <p id="auth-error" style="color: red; margin-top: 10px;"></p>
+            </div>
+        </section>`,
+
+    // Страница самой заявки
+    applicationForm: `
+        <section class="container">
+            <h1 class="huge-title">Заявка на Бакалавриат</h1>
+            <p>Привет, <strong id="user-display-name"></strong>! Заполни данные для поступления:</p>
+            <div class="auth-form">
+                <select id="app-program">
+                    <option value="engineering">Креативная инженерия</option>
+                    <option value="digital">Цифровые продукты</option>
+                </select>
+                <textarea id="app-motivation" placeholder="Почему вы хотите учиться у нас?"></textarea>
+                <button class="main-button" onclick="submitApplication()">Отправить заявку</button>
+            </div>
+        </section>`,
+
+    success: `
+        <section class="container">
+            <h1 class="huge-title">Готово!</h1>
+            <p>Ваша заявка принята. Мы свяжемся с вами в ближайшее время.</p>
+            <button class="main-button" onclick="showPage('home')">На главную</button>
+        </section>`,
     home: `
         <section class="hero">
             <div class="hero-card">
                 <h1 id="hero-title">Будущее Пренадлежит Лидерам</h1>
                 <p id="hero-desc">Разрабатываем инновации на стыке AI и робототехники для Decentrathon 5.0</p>
-                <button class="main-button" id="apply-btn">Подать заявку</button>
+                <button class="main-button" onclick="startApplication()">Подать заявку</button>
             </div>
         </section>`,
     contacts: `
@@ -196,6 +239,16 @@ const pages = {
         </section>`
 };
 
+const firebaseConfig = {
+    apiKey: "AIzaSyCPlBNPamgTRxNGr2VAl5zBHNe-d1-wHNE",
+    authDomain: "gigabyte5decentrathon.firebaseapp.com",
+    projectId: "gigabyte5decentrathon",
+    storageBucket: "gigabyte5decentrathon.firebasestorage.app",
+    messagingSenderId: "991235315498",
+    appId: "1:991235315498:web:9048e5f43ac795bf85b053",
+    measurementId: "G-J8Y2MBJVYY"
+  };
+
 // Универсальная функция отрисовки страниц
 function showPage(pageId) {
     localStorage.setItem('activePage', pageId); // Запоминаем страницу
@@ -252,3 +305,134 @@ function showPage(pageId) {
 
 // Запускаем главную при загрузке
 showPage('home');
+
+// Функция, которая вызывается при клике на "Подать заявку"
+function startApplication() {
+    if (!currentUser) {
+        alert("Для подачи заявки необходимо зарегистрироваться");
+        showPage('auth');
+    } else {
+        showPage('applicationForm');
+        // Небольшая задержка, чтобы DOM успел обновиться
+        setTimeout(() => {
+            document.getElementById('user-display-name').innerText = currentUser.name;
+        }, 10);
+    }
+}
+
+// Регистрация
+function handleRegister() {
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+
+    if (name && email) {
+        currentUser = { name, email };
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        alert(`Добро пожаловать, ${name}!`);
+        showPage('applicationForm');
+    } else {
+        document.getElementById('auth-error').innerText = "Заполните все поля!";
+    }
+}
+
+// Отправка заявки (пока просто в консоль)
+function submitApplication() {
+    const program = document.getElementById('app-program').value;
+    const motivation = document.getElementById('app-motivation').value;
+
+    const fullApplication = {
+        user: currentUser,
+        program: program,
+        motivation: motivation,
+        date: new Date().toISOString()
+    };
+
+    console.log("Заявка сохранена:", fullApplication);
+    // Здесь позже будет запрос к Firebase
+    showPage('success');
+}
+
+// Инициализация
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+// Функция для отправки заявки в облако
+function submitApplication() {
+    const program = document.getElementById('app-program').value;
+    const motivation = document.getElementById('app-motivation').value;
+
+    if (!currentUser) {
+        alert("Ошибка: пользователь не найден");
+        return;
+    }
+
+    // Сохраняем в коллекцию "applications"
+    db.collection("applications").add({
+        userName: currentUser.name,
+        userEmail: currentUser.email,
+        program: program,
+        motivation: motivation,
+        status: "pending",
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then((docRef) => {
+        console.log("Заявка сохранена с ID: ", docRef.id);
+        showPage('success');
+    })
+    .catch((error) => {
+        console.error("Ошибка при добавлении: ", error);
+        alert("Произошла ошибка при отправке");
+    });
+}
+
+function loadApplications() {
+    db.collection("applications").orderBy("createdAt", "desc").onSnapshot((querySnapshot) => {
+        const listDiv = document.getElementById('admin-list');
+        listDiv.innerHTML = ""; // Очищаем текст "Загрузка"
+
+        querySnapshot.forEach((doc) => {
+            const app = doc.data();
+            listDiv.innerHTML += `
+                <div class="app-card" style="border: 1px solid #ddd; padding: 20px; margin-bottom: 10px; border-radius: 8px; background: #fff; color: #000;">
+                    <h3>${app.userName}</h3>
+                    <p><strong>Программа:</strong> ${app.program}</p>
+                    <p><strong>Email:</strong> ${app.userEmail}</p>
+                    <p><strong>Мотивация:</strong> ${app.motivation}</p>
+                    <span style="font-size: 12px; color: #888;">ID: ${doc.id}</span>
+                </div>
+            `;
+        });
+    });
+}
+
+// Обнови функцию showPage, чтобы она вызывала загрузку данных
+const originalShowPage = showPage;
+showPage = function(pageId) {
+    originalShowPage(pageId);
+    if (pageId === 'admin') {
+        loadApplications();
+    }
+};
+
+function submitApplication() {
+    const program = document.getElementById('app-program').value;
+    const motivation = document.getElementById('app-motivation').value;
+
+    if (motivation.length < 10) {
+        alert("Пожалуйста, напишите чуть подробнее о своей мотивации (минимум 10 символов)");
+        return;
+    }
+
+    db.collection("applications").add({
+        userName: currentUser.name,
+        userEmail: currentUser.email,
+        program: program,
+        motivation: motivation,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        showPage('success');
+    })
+    .catch((error) => alert("Ошибка: " + error));
+}
