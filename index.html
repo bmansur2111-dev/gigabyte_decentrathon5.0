@@ -10,7 +10,7 @@
 <body>
 
     <header class="navbar">
-        <div class="logo">GIGABYTE <span class="dot">.</span></div>
+        <div class="logo" onclick="showPage('home')">GIGABYTE<span class="dot">.</span></div>
         
         <nav class="nav-links">
             <a href="#" onclick="showPage('bakalavriat')">Бакалавриат</a>
@@ -19,19 +19,14 @@
         </nav>
         
         <div class="lang-panel">
-            <span class="lang-btn" onclick="changeLang('en')">EN</span>
-            <span class="lang-btn" onclick="changeLang('kz')">KZ</span>
-            <span class="lang-btn active" onclick="changeLang('ru')">RU</span>
-        </div>
+    <span class="lang-btn" onclick="changeLang('en')">EN</span>
+    <span class="lang-btn" onclick="changeLang('kz')">KZ</span>
+    <span class="lang-btn active" onclick="changeLang('ru')">RU</span>
+</div>
     </header>
 
-    <main class="hero">
-        <div class="hero-card">
-            <h1 id="hero-title">Будущее технологий вместе с GIGABYTE</h1>
-            <p id="hero-desc">Разрабатываем инновации на стыке AI и робототехники для Decentrathon 5.0</p>
-            <button class="main-button" id="apply-btn">Подать заявку</button>
-        </div>
-    </main>
+    <main id="main-content">
+        </main>
 
     <script src="script.js"></script>
 </body>
