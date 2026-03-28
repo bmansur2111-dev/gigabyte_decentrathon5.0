@@ -2,12 +2,21 @@ let currentUser = JSON.parse(localStorage.getItem('user')) || null;
 const pages = {
     // Добавь это в объект pages
 admin: `
-    <section class="container">
-        <h1 class="huge-title">Панель управления</h1>
-        <p>Список всех заявок команды GIGABYTE:</p>
-        <div id="admin-list" class="admin-grid">
-            <p>Загрузка данных...</p>
-        </div>
+    <section class="container" style="max-width: 1200px;">
+        <h1 class="huge-title">Admin Panel</h1>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ФИО</th>
+                    <th>Программа</th>
+                    <th>Мотивация</th>
+                    <th>AI Score</th>
+                    <th>Оценка комиссии</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+        </table>
     </section>
 `,
     auth: `
@@ -285,6 +294,74 @@ function showPage(pageId) {
     
     // Обновляем навигацию (чтобы пункты меню тоже перевелись)
     updateNavbar();
+}
+
+function getAIScore(text) {
+    const keywords = ['робот', 'программирование', 'лидер', 'команда', 'проект', 'GIGABYTE', 'FLL'];
+    let score = 50; // Базовый балл
+    keywords.forEach(word => {
+        if (text.toLowerCase().includes(word.toLowerCase())) score += 7;
+    });
+    return Math.min(score, 100); // Не больше 100
+}
+
+function submitApplication() {
+    const motivation = document.getElementById('app-motivation').value;
+    const program = document.getElementById('app-program').value;
+    const aiRating = getAIScore(motivation); // Вычисляем балл
+
+    db.collection("applications").add({
+        userName: currentUser.name,
+        userEmail: currentUser.email,
+        program: program,
+        motivation: motivation,
+        aiScore: aiRating, // Сохраняем балл ИИ
+        commissionScore: "", // Пустое поле для комиссии
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(() => showPage('success'));
+}
+
+function loadAdminData() {
+    db.collection("applications").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+        const tbody = document.getElementById('admin-table-body');
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            tbody.innerHTML += `
+                <tr>
+                    <td>${data.userName}</td>
+                    <td>${data.program}</td>
+                    <td><div style="max-height:60px; overflow:auto;">${data.motivation}</div></td>
+                    <td><span class="ai-score-badge">${data.aiScore}/100</span></td>
+                    <td><input type="number" id="input-${doc.id}" value="${data.commissionScore || ''}" style="width:50px"></td>
+                    <td><button class="save-btn" onclick="saveScore('${doc.id}')">OK</button></td>
+                </tr>
+            `;
+        });
+    });
+}
+
+// Функция сохранения оценки комиссии
+function saveScore(id) {
+    const newScore = document.getElementById(`input-${id}`).value;
+    db.collection("applications").doc(id).update({
+        commissionScore: newScore
+    }).then(() => alert("Оценка сохранена!"));
+}
+
+// ПРОВЕРКА СЕКРЕТНОГО ВХОДА
+window.onhashchange = () => {
+    if (window.location.hash === '#admin') {
+        showPage('admin');
+        loadAdminData();
+    }
+};
+
+// Проверка при первой загрузке
+if (window.location.hash === '#admin') {
+    setTimeout(() => { showPage('admin'); loadAdminData(); }, 500);
 }
 
 function updateNavbar() {

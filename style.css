@@ -154,3 +154,32 @@ p { font-size: 18px; color: #aaa; margin-bottom: 40px; }
     height: 120px;
     resize: none;
 }
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+}
+.admin-table th, .admin-table td {
+    padding: 12px;
+    border: 1px solid #eee;
+    text-align: left;
+    font-size: 14px;
+}
+.admin-table th { background: #f8f9fa; font-weight: bold; }
+.ai-score-badge {
+    background: #e1f5fe;
+    color: #0288d1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.save-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
