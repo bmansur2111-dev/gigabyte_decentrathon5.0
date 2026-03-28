@@ -260,40 +260,55 @@ const firebaseConfig = {
 
 // Универсальная функция отрисовки страниц
 function showPage(pageId) {
-    localStorage.setItem('activePage', pageId); // Запоминаем страницу
-    const t = translations[currentLang]; // Сокращение для удобства
-    
-    const pages = {
-        home: `
-            <section class="hero">
-                <div class="hero-card">
-                    <h1>${t.heroTitle}</h1>
-                    <p>${t.heroDesc}</p>
-                    <button class="main-button">${t.applyBtn}</button>
-                </div>
-            </section>`,
-        
-        bakalavriat: `
-            <div class="container">
-                <h1 class="huge-title">${t.bakalavriat}</h1>
-                <div class="dates-block">
-                    <strong class="dates-title">${t.datesTitle}</strong>
-                    <ul class="dates-list">
-                        <li><span>${t.earlyStream}</span> до 15 апреля</li>
-                        <li><span>${t.mainStream}</span> до 1 июля</li>
-                        <li><span>${t.extraStream}</span> до 25 августа</li>
-                    </ul>
-                </div>
-            </div>`,
-        
-        about: ``,
-        contacts: ``
-    };
+    const contentDiv = document.getElementById('main-content');
+    if (!contentDiv) return;
 
-    document.getElementById('main-content').innerHTML = pages[pageId];
-    
-    // Обновляем навигацию (чтобы пункты меню тоже перевелись)
-    updateNavbar();
+    // 1. Отрисовываем саму страницу из объекта pages
+    contentDiv.innerHTML = pages[pageId];
+
+    // 2. Если перешли на админку — ПРИНУДИТЕЛЬНО запускаем загрузку данных
+    if (pageId === 'admin') {
+        console.log("Админка отрисована, запрашиваю данные из Firebase...");
+        loadAdminData(); 
+    }
+}
+
+// Убедись, что функция загрузки выглядит именно так:
+function loadAdminData() {
+    const tbody = document.getElementById('admin-table-body');
+    if (!tbody) {
+        console.error("Ошибка: элемент admin-table-body не найден на странице!");
+        return;
+    }
+
+    // Включаем "живое" обновление через onSnapshot
+    db.collection("applications").orderBy("createdAt", "desc")
+        .onSnapshot((snapshot) => {
+            tbody.innerHTML = ""; // Очищаем перед обновлением
+            
+            if (snapshot.empty) {
+                tbody.innerHTML = "<tr><td colspan='6'>Заявок пока нет</td></tr>";
+                return;
+            }
+
+            snapshot.forEach((doc) => {
+                const app = doc.data();
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${app.userName || 'Без имени'}</td>
+                        <td>${app.program || '—'}</td>
+                        <td><div style="font-size:11px">${app.motivation || '...'}</div></td>
+                        <td><span class="ai-score-badge">${app.aiScore || 0}/100</span></td>
+                        <td><input type="number" id="input-${doc.id}" value="${app.commissionScore || ''}" style="width:50px"></td>
+                        <td><button class="save-btn" onclick="saveScore('${doc.id}')">OK</button></td>
+                    </tr>
+                `;
+            });
+            console.log("Данные успешно подгружены!");
+        }, (error) => {
+            console.error("Ошибка Firebase:", error);
+            tbody.innerHTML = `<tr><td colspan='6' style="color:red">Ошибка доступа!</td></tr>`;
+        });
 }
 
 function getAIScore(text) {
@@ -512,4 +527,103 @@ function submitApplication() {
         showPage('success');
     })
     .catch((error) => alert("Ошибка: " + error));
+}
+
+function showPage(pageId) {
+    const contentDiv = document.getElementById('main-content');
+    if (!contentDiv) return;
+
+    // Отрисовываем контент
+    contentDiv.innerHTML = pages[pageId];
+    
+    // ВАЖНО: Если зашли на админку, запускаем загрузку данных из Firebase
+    if (pageId === 'admin') {
+        console.log("Загрузка админ-панели...");
+        loadAdminData(); 
+    }
+    
+    window.scrollTo(0,0);
+}
+
+// Эта функция сработает, если ты вручную допишешь #admin в браузере
+window.addEventListener('hashchange', () => {
+    if (window.location.hash === '#admin') {
+        showPage('admin');
+    }
+});
+
+// Эта функция сработает сразу при загрузке страницы, если там уже есть #admin
+window.addEventListener('load', () => {
+    if (window.location.hash === '#admin') {
+        showPage('admin');
+    }
+});
+
+function loadAdminData() {
+    const tbody = document.getElementById('admin-table-body');
+    if (!tbody) return;
+
+    // Очищаем таблицу перед загрузкой (показываем статус)
+    tbody.innerHTML = "<tr><td colspan='6'>Загрузка заявок...</td></tr>";
+
+    // Подключаемся к коллекции
+    db.collection("applications")
+      .orderBy("createdAt", "desc") // Сначала новые
+      .onSnapshot((snapshot) => {
+        tbody.innerHTML = ""; // Очищаем для новых данных
+        
+        if (snapshot.empty) {
+            tbody.innerHTML = "<tr><td colspan='6'>Заявок пока нет</td></tr>";
+            return;
+        }
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const id = doc.id;
+
+            // Формируем строку таблицы
+            tbody.innerHTML += `
+                <tr>
+                    <td>${data.userName || 'Аноним'}</td>
+                    <td>${data.program || 'Не выбрана'}</td>
+                    <td>
+                        <div style="max-height: 50px; overflow-y: auto; font-size: 12px; max-width: 250px;">
+                            ${data.motivation || 'Нет текста'}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="ai-score-badge">${data.aiScore || 0}/100</span>
+                    </td>
+                    <td>
+                        <input type="number" id="score-${id}" 
+                               value="${data.commissionScore || ''}" 
+                               style="width: 50px; padding: 5px;" 
+                               placeholder="0">
+                    </td>
+                    <td>
+                        <button class="save-btn" onclick="saveScore('${id}')">Сохранить</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }, (error) => {
+        console.error("Ошибка Firestore:", error);
+        tbody.innerHTML = `<tr><td colspan='6' style="color:red">Ошибка доступа: ${error.message}</td></tr>`;
+    });
+}
+
+function saveScore(docId) {
+    const scoreValue = document.getElementById(`score-${docId}`).value;
+    
+    db.collection("applications").doc(docId).update({
+        commissionScore: scoreValue,
+        status: "reviewed" // Меняем статус на "проверено"
+    })
+    .then(() => {
+        alert("Оценка успешно сохранена в Firebase!");
+    })
+    .catch((error) => {
+        console.error("Ошибка обновления:", error);
+        alert("Не удалось сохранить балл.");
+    });
 }
