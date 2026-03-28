@@ -1,54 +1,157 @@
+/* Основные сбросы и настройки */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif; /* Шрифт как на скрине */
 }
 
 body {
-    background-color: #0f172a; /* Темный фон */
-    color: white;
-    line-height: 1.6;
+    background-color: #f8f9fa; /* Общий фон страницы (светлый) */
+    color: #333;
 }
 
+/* Навигация */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 50px;
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(10px);
+    padding: 15px 60px; /* Отступы по бокам как на скрине */
+    background: white;
+    border-bottom: 1px solid #e9ecef;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
-.hero {
-    height: 80vh;
+.logo-area {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+}
+
+.logo-main {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.logo-sub {
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px; /* Расстояние между ссылками */
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: #cffc02; /* Салатовый при наведении */
+}
+
+.nav-right {
+    display: flex;
     align-items: center;
-    text-align: center;
-    background: linear-gradient(45deg, #1e293b, #334155);
+    gap: 20px;
 }
 
-h1 {
-    font-size: 4rem;
-    margin-bottom: 20px;
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6c757d;
+    padding: 5px;
+    border-radius: 50%;
+    transition: 0.2s;
 }
 
-.primary-btn {
-    padding: 15px 30px;
-    background: #3b82f6;
+.icon-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* Смена языков */
+.lang-switcher {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.lang-link {
+    text-decoration: none;
+    color: #6c757d;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.lang-link.active {
+    color: #333;
+    font-weight: 700; /* Жирный для активного */
+}
+
+/* Главный блок (Hero) */
+.hero {
+    height: 70vh; /* Высота блока */
+    /* ЗАГЛУШКА ДЛЯ ФОНА: Когда Айбиби даст картинку, раскомментируй строку ниже */
+    /* background-image: url('assets/hero-bg.png'); */
+    background-color: #212529; /* Пока поставим темный фон */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding-left: 60px; /* Сдвиг зеленого бокса влево */
+}
+
+.hero-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* Зеленый бокс */
+.green-box {
+    background-color: #cffc02; /* Фирменный салатовый */
+    padding: 50px 40px;
+    max-width: 500px; /* Ширина бокса */
+    border-radius: 4px; /* Совсем небольшое скругление */
+}
+
+.green-box h1 {
+    font-size: 32px;
+    line-height: 1.2;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.u-line {
+    text-decoration: underline; /* Подчеркивание для слов Бакалавриата/Foundation */
+}
+
+.cta-btn {
+    padding: 12px 24px;
+    background-color: #212529; /* Темная кнопка */
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 20px; /* Закругленная кнопка */
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+    transition: opacity 0.2s;
 }
 
-.primary-btn:hover {
-    background: #2563eb;
-    transform: scale(1.05);
+.cta-btn:hover {
+    opacity: 0.8;
+}
+
+/* Полоса внизу */
+.bottom-stripe {
+    height: 5vh;
+    background-color: #cffc02;
 }
