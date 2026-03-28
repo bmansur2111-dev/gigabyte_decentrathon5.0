@@ -196,64 +196,6 @@ const pages = {
         </section>`
 };
 
-// База переводов
-const translations = {
-    ru: {
-        bakalavriat: "Бакалавриат",
-        about: "О нас",
-        contacts: "Контакты",
-        heroTitle: "Будущее технологий вместе с GIGABYTE",
-        heroDesc: "Разрабатываем инновации на стыке AI и робототехники для Decentrathon 5.0",
-        applyBtn: "Подать заявку",
-        datesTitle: "Сроки:",
-        earlyStream: "Ранний поток:",
-        mainStream: "Основной поток:",
-        extraStream: "Дополнительный набор:"
-    },
-    en: {
-        bakalavriat: "Undergraduate",
-        about: "About Us",
-        contacts: "Contacts",
-        heroTitle: "The Future of Tech with GIGABYTE",
-        heroDesc: "Developing innovations at the intersection of AI and Robotics for Decentrathon 5.0",
-        applyBtn: "Apply Now",
-        datesTitle: "Deadlines:",
-        earlyStream: "Early bird:",
-        mainStream: "Main stream:",
-        extraStream: "Extra intake:"
-    },
-    kz: {
-        bakalavriat: "Бакалавриат",
-        about: "Біз туралы",
-        contacts: "Контактілер",
-        heroTitle: "GIGABYTE-пен бірге технологиялар болашағы",
-        heroDesc: "Decentrathon 5.0 үшін AI мен робототехника тоғысындағы инновацияларды әзірлеудеміз",
-        applyBtn: "Өтінім беру",
-        datesTitle: "Мерзімдері:",
-        earlyStream: "Ерте ағым:",
-        mainStream: "Негізгі ағым:",
-        extraStream: "Қосымша қабылдау:"
-    }
-};
-
-let currentLang = 'ru';
-
-// Функция смены языка
-function changeLang(lang) {
-    currentLang = lang;
-    
-    // 1. Обновляем визуально кнопки
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase() === lang) btn.classList.add('active');
-    });
-
-    // 2. Перерисовываем текущую страницу, чтобы подтянулся новый язык
-    // (Если ты используешь структуру с функцией showPage)
-    const activePage = localStorage.getItem('activePage') || 'home';
-    showPage(activePage);
-}
-
 // Универсальная функция отрисовки страниц
 function showPage(pageId) {
     localStorage.setItem('activePage', pageId); // Запоминаем страницу
@@ -310,13 +252,3 @@ function showPage(pageId) {
 
 // Запускаем главную при загрузке
 showPage('home');
-
-// Функция смены языка (пример для главной)
-function changeLang(lang) {
-    // Здесь можно расширить логику переводов для всех страниц
-    console.log("Язык изменен на:", lang);
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase() === lang) btn.classList.add('active');
-    });
-}
