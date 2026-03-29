@@ -44,40 +44,183 @@ admin: `
 
         <div id="tab-personal" class="tab-content">
             <div class="section">
-                <h3 class="section-title">Personal Info</h3>
+                <h3 class="section-title">Личная Информация</h3>
                 <div class="input-grid">
-                    <div class="input-group"><label>Фамилия</label><input type="text" id="last-name"></div>
-                    <div class="input-group"><label>Имя</label><input type="text" id="first-name"></div>
+                    <div class="input-group"><label>ФИО *</label><input type="text" id="p-fullname" placeholder="Иванов Иван Иванович"></div>
+                    <div class="input-group"><label>Дата рождения *</label><input type="date" id="p-birthdate"></div>
+                    <div class="input-group">
+                        <label>Пол *</label>
+                        <select id="p-gender">
+                            <option value="male">Мужской</option>
+                            <option value="female">Женский</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+
+            <div class="section">
+                <h3 class="section-title">Гражданство и паспортные данные</h3>
+                <div class="input-grid">
+                    <div class="input-group"><label>Гражданство *</label><input type="text" id="p-citizenship" value="Kazakhstan"></div>
+                    <div class="input-group"><label>ИИН *</label><input type="number" id="p-iin" placeholder="12 цифр"></div>
+                    <div class="input-group"><label>Номер документа *</label><input type="text" id="p-doc-number" placeholder="N00000000"></div>
+                    <div class="input-group"><label>Дата выдачи *</label><input type="date" id="p-doc-date"></div>
+                    
+                    <div class="input-group">
+                        <label>Копия вашего паспорта *</label>
+                        <input type="file" id="p-passport-file" accept="image/*,.pdf" style="border:none; padding: 5px 0;">
+                        <small style="color: #888;">Загрузите скан или фото (PDF, JPG, PNG)</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Сведения о родителях</h3>
+                <div class="input-grid">
+                    <div class="input-group"><label>ФИО Мамы</label><input type="text" id="p-mother-name"></div>
+                    <div class="input-group"><label>Телефон Мамы</label><input type="tel" id="p-mother-phone" placeholder="+7"></div>
+                    
+                    <div class="input-group"><label>ФИО Папы</label><input type="text" id="p-father-name"></div>
+                    <div class="input-group"><label>Телефон Папы</label><input type="tel" id="p-father-phone" placeholder="+7"></div>
+                    
+                    <div class="input-group"><label>ФИО Опекуна (если есть)</label><input type="text" id="p-guardian-name"></div>
+                    <div class="input-group"><label>Телефон Опекуна</label><input type="tel" id="p-guardian-phone" placeholder="+7"></div>
+                </div>
+            </div>
+            
             <button class="next-btn" onclick="switchTab('contact')">Далее</button>
         </div>
 
         <div id="tab-contact" class="tab-content" style="display:none">
             <div class="section">
-                <h3 class="section-title">Contact Info</h3>
+                <h3 class="section-title">Домашний адрес</h3>
                 <div class="input-grid">
-                    <div class="input-group"><label>Город</label><input type="text" id="c-city"></div>
-                    <div class="input-group"><label>Телефон</label><input type="tel" id="c-phone"></div>
+                    <div class="input-group">
+                        <label>Страна *</label>
+                        <input type="text" id="c-country" value="Kazakhstan">
+                    </div>
+                    <div class="input-group">
+                        <label>Регион *</label>
+                        <input type="text" id="c-region" placeholder="Напр: Акмолинская область">
+                    </div>
+                    <div class="input-group">
+                        <label>Город *</label>
+                        <input type="text" id="c-city" placeholder="Кокшетау">
+                    </div>
+                    <div class="input-group">
+                        <label>Улица *</label>
+                        <input type="text" id="c-street" placeholder="ул. Абая">
+                    </div>
+                    <div class="input-group">
+                        <label>Дом *</label>
+                        <input type="text" id="c-house" placeholder="10">
+                    </div>
+                    <div class="input-group">
+                        <label>Квартира</label>
+                        <input type="text" id="c-apartment" placeholder="5">
+                    </div>
                 </div>
             </div>
-            <div class="button-row">
+
+            <div class="section">
+                <h3 class="section-title">Контактная информация</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Номер телефона *</label>
+                        <input type="tel" id="c-phone" placeholder="+7 (___) ___-__-__">
+                    </div>
+                    <div class="input-group">
+                        <label>Instagram</label>
+                        <input type="text" id="c-instagram" placeholder="@username">
+                    </div>
+                    <div class="input-group">
+                        <label>Telegram</label>
+                        <input type="text" id="c-telegram" placeholder="@username">
+                    </div>
+                    <div class="input-group">
+                        <label>WhatsApp</label>
+                        <input type="tel" id="c-whatsapp" placeholder="+7 (___) ___-__-__">
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-row" style="margin-top: 30px;">
                 <button class="prev-btn" onclick="switchTab('personal')">Назад</button>
                 <button class="next-btn" onclick="switchTab('education')">Далее</button>
             </div>
         </div>
 
         <div id="tab-education" class="tab-content" style="display:none">
+            
             <div class="section">
-                <h3 class="section-title">Education</h3>
+                <div class="section-header-flex">
+                    <h3 class="section-title">Личная презентация (Эссе)</h3>
+                    <button type="button" class="info-btn" onclick="alert('Критерии оценки: Мотивация, Лидерский потенциал, Креативность и структура.\\n\\nВопросы:\\n1. Почему inVision U?\\n2. Какая программа и почему?\\n3. Трудность, которую преодолели?\\n4. Долгосрочные цели и мотивация?\\n5. Что значит лидерство?\\n6. Поддержка семьи?')">Инструкция</button>
+                </div>
                 <div class="essay-group">
-                    <label>Эссе (вопрос 1)</label>
-                    <textarea id="q1"></textarea>
+                    <label>Напишите ваше мотивационное письмо (эссе) здесь:</label>
+                    <textarea id="e-essay" rows="10" placeholder="Ваше эссе должно отвечать на все 6 вопросов из инструкции..."></textarea>
                 </div>
             </div>
-            <div class="button-row">
+
+            <div class="section">
+                <div class="section-header-flex">
+                    <h3 class="section-title">Портфолио</h3>
+                    <button type="button" class="info-btn" onclick="alert('Формат PDF, до 10 страниц. 3-4 лучших проекта. Каждый проект: визуал + описание + авторство.')">Инструкция</button>
+                </div>
+                <div class="input-group">
+                    <label>Загрузите ваше портфолио (PDF) *</label>
+                    <input type="file" id="e-portfolio-file" accept=".pdf">
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Владение английским языком</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Ваш уровень/сертификат *</label>
+                        <select id="e-english-type">
+                            <option value="ielts">IELTS 6.0+</option>
+                            <option value="toefl">TOEFL 60-78</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Скан сертификата *</label>
+                        <input type="file" id="e-english-file" accept="image/*,.pdf">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Сертификаты и аттестаты</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label>Тип документа *</label>
+                        <select id="e-edu-type">
+                            <option value="ent">ЕНТ</option>
+                            <option value="nish">Аттестат НИШ (12 классов)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Загрузить файл *</label>
+                        <input type="file" id="e-edu-file" accept="image/*,.pdf">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Дополнительные документы</h3>
+                <div class="input-group">
+                    <label>Грамоты, сертификаты, доп. достижения</label>
+                    <input type="file" id="e-extra-files" multiple accept="image/*,.pdf">
+                    <small style="color: #888;">Можно выбрать несколько файлов</small>
+                </div>
+            </div>
+
+            <div class="button-row" style="margin-top: 30px;">
                 <button class="prev-btn" onclick="switchTab('contact')">Назад</button>
-                <button id="submit-application" class="next-btn">Отправить заявку</button>
+                <button id="submit-application" class="next-btn" style="background: #adff2f; color: black; font-weight: bold;">ОТПРАВИТЬ ЗАЯВКУ</button>
             </div>
         </div>
     </div>

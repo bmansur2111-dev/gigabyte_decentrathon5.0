@@ -265,3 +265,55 @@ p { font-size: 18px; color: #aaa; margin-bottom: 40px; }
 .stepper-nav { display: flex; gap: 10px; margin-bottom: 30px; }
 .step-btn { background: #333; color: #888; border: none; padding: 10px; cursor: pointer; border-radius: 5px; flex: 1; }
 .step-btn.active { background: #adff2f; color: black; }
+
+input[type="file"]::-webkit-file-upload-button {
+    background: #333;
+    color: white;
+    border: 1px solid #444;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: #adff2f;
+    color: black;
+}
+
+
+.section-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.info-btn {
+    background: transparent;
+    border: 1px solid #adff2f;
+    color: #adff2f;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.info-btn:hover {
+    background: #adff2f;
+    color: black;
+}
+
+.essay-group textarea {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    padding: 15px;
+    font-family: inherit;
+    line-height: 1.5;
+    resize: vertical;
+}
