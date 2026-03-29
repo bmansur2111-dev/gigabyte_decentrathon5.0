@@ -230,3 +230,38 @@ p { font-size: 18px; color: #aaa; margin-bottom: 40px; }
 .prev-btn:hover {
     background: #444;
 }
+
+.essay-group label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #eee;
+}
+
+.essay-group textarea {
+    width: 100%;
+    padding: 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.essay-group textarea:focus {
+    border-color: #adff2f;
+    outline: none;
+}
+
+.apply-container { max-width: 800px; margin: 0 auto; padding: 20px; color: white; }
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.input-group { display: flex; flex-direction: column; margin-bottom: 15px; }
+.input-group input, .input-group select, .essay-group textarea { 
+    background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 5px; 
+}
+.section-title { border-left: 4px solid #adff2f; padding-left: 10px; margin: 20px 0; }
+.stepper-nav { display: flex; gap: 10px; margin-bottom: 30px; }
+.step-btn { background: #333; color: #888; border: none; padding: 10px; cursor: pointer; border-radius: 5px; flex: 1; }
+.step-btn.active { background: #adff2f; color: black; }

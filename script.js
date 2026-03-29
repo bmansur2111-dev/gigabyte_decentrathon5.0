@@ -31,161 +31,57 @@ admin: `
         </section>`,
 
     // Страница самой заявки
-    applicationForm:  `
-        <div class="apply-container">
-            <h1>Заявка на Бакалавриат</h1>
-            <p>Привет! Заполни данные для поступления:</p>
-            
-            <div class="stepper-nav">
-                <button class="step-btn active" onclick="switchTab('personal')">Personal Information</button>
-                <button class="step-btn" onclick="switchTab('contact')">Contact Information</button>
-                <button class="step-btn" onclick="switchTab('education')">Education</button>
-            </div>
-
-            <div id="tab-personal" class="tab-content">
-                <div class="section">
-                    <h3 class="section-title">Данные абитуриента</h3>
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label>Фамилия *</label>
-                            <input type="text" id="last-name" placeholder="Фамилия">
-                        </div>
-                        <div class="input-group">
-                            <label>Имя *</label>
-                            <input type="text" id="first-name" placeholder="Имя">
-                        </div>
-                        <div class="input-group">
-                            <label>Отчество</label>
-                            <input type="text" id="patronymic" placeholder="Отчество">
-                        </div>
-                        <div class="input-group">
-                            <label>Дата рождения *</label>
-                            <input type="date" id="birth-date">
-                        </div>
-                        <div class="input-group">
-                            <label>Пол *</label>
-                            <select id="gender">
-                                <option value="male">Мужской</option>
-                                <option value="female">Женский</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3 class="section-title">Гражданство и паспортные данные</h3>
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label>Гражданство *</label>
-                            <input type="text" id="citizenship" value="Kazakhstan">
-                        </div>
-                        <div class="input-group">
-                            <label>ИИН *</label>
-                            <input type="number" id="iin" placeholder="12 цифр">
-                        </div>
-                        <div class="input-group">
-                            <label>Номер документа *</label>
-                            <input type="text" id="doc-number" placeholder="N00000000">
-                        </div>
-                        <div class="input-group">
-                            <label>Дата выдачи *</label>
-                            <input type="date" id="doc-date">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3 class="section-title">Сведения о родителях</h3>
-                    <div class="input-grid">
-                        <div class="input-group">
-                            <label>ФИО Матери</label>
-                            <input type="text" id="mother-name">
-                        </div>
-                        <div class="input-group">
-                            <label>ФИО Отца</label>
-                            <input type="text" id="father-name">
-                        </div>
-                    </div>
-                </div>
-                
-                <button class="next-btn" onclick="switchTab('contact')">Далее</button>
-            </div>
-
-            <div id="tab-contact" class="tab-content" style="display:none">
-                </div>
-            
-            <div id="tab-education" class="tab-content" style="display:none">
-                </div>
+    applicationForm: `
+    <div class="apply-container">
+        <h1>Заявка на Бакалавриат</h1>
+        <p>При! Заполни данные для поступления:</p>
+        
+        <div class="stepper-nav">
+            <button class="step-btn active" id="btn-personal" onclick="switchTab('personal')">Personal Information</button>
+            <button class="step-btn" id="btn-contact" onclick="switchTab('contact')">Contact Information</button>
+            <button class="step-btn" id="btn-education" onclick="switchTab('education')">Education</button>
         </div>
+
+        <div id="tab-personal" class="tab-content">
+            <div class="section">
+                <h3 class="section-title">Personal Info</h3>
+                <div class="input-grid">
+                    <div class="input-group"><label>Фамилия</label><input type="text" id="last-name"></div>
+                    <div class="input-group"><label>Имя</label><input type="text" id="first-name"></div>
+                </div>
+            </div>
+            <button class="next-btn" onclick="switchTab('contact')">Далее</button>
+        </div>
+
         <div id="tab-contact" class="tab-content" style="display:none">
-    <div class="section">
-        <h3 class="section-title">Домашний адрес</h3>
-        <div class="input-grid">
-            <div class="input-group">
-                <label>Страна *</label>
-                <select id="c-country">
-                    <option value="Kazakhstan">Kazakhstan</option>
-                    <option value="Other">Other</option>
-                </select>
+            <div class="section">
+                <h3 class="section-title">Contact Info</h3>
+                <div class="input-grid">
+                    <div class="input-group"><label>Город</label><input type="text" id="c-city"></div>
+                    <div class="input-group"><label>Телефон</label><input type="tel" id="c-phone"></div>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Регион *</label>
-                <input type="text" id="c-region" placeholder="Напр: Акмолинская область">
+            <div class="button-row">
+                <button class="prev-btn" onclick="switchTab('personal')">Назад</button>
+                <button class="next-btn" onclick="switchTab('education')">Далее</button>
             </div>
-            <div class="input-group">
-                <label>Город *</label>
-                <input type="text" id="c-city" placeholder="Напр: Кокшетау">
+        </div>
+
+        <div id="tab-education" class="tab-content" style="display:none">
+            <div class="section">
+                <h3 class="section-title">Education</h3>
+                <div class="essay-group">
+                    <label>Эссе (вопрос 1)</label>
+                    <textarea id="q1"></textarea>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Улица *</label>
-                <input type="text" id="c-street" placeholder="Напр: ул. Абая">
-            </div>
-            <div class="input-group">
-                <label>Дом *</label>
-                <input type="text" id="c-house" placeholder="10">
-            </div>
-            <div class="input-group">
-                <label>Квартира</label>
-                <input type="text" id="c-apartment" placeholder="5">
+            <div class="button-row">
+                <button class="prev-btn" onclick="switchTab('contact')">Назад</button>
+                <button id="submit-application" class="next-btn">Отправить заявку</button>
             </div>
         </div>
     </div>
-
-    <div class="section">
-        <h3 class="section-title">Контактная информация</h3>
-        <div class="input-grid">
-            <div class="input-group">
-                <label>Номер телефона *</label>
-                <input type="tel" id="c-phone" placeholder="+7 (___) ___-__-__">
-            </div>
-            <div class="input-group">
-                <label>Instagram</label>
-                <input type="text" id="c-instagram" placeholder="@username">
-            </div>
-            <div class="input-group">
-                <label>Telegram</label>
-                <input type="text" id="c-telegram" placeholder="@username">
-            </div>
-            <div class="input-group">
-                <label>WhatsApp *</label>
-                <input type="tel" id="c-whatsapp" placeholder="+7 (___) ___-__-__">
-            </div>
-        </div>
-    </div>
-
-    <div class="checkbox-group" style="margin-top: 20px;">
-        <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: #888;">
-            <input type="checkbox" id="c-privacy" required> 
-            Нажимая на кнопку, вы соглашаетесь с Политикой конфиденциальности.
-        </label>
-    </div>
-
-    <div class="button-row" style="margin-top: 30px; display: flex; gap: 10px;">
-        <button class="prev-btn" onclick="switchTab('personal')" style="background: #333;">Назад</button>
-        <button class="next-btn" onclick="switchTab('education')">Далее</button>
-    </div>
-</div>
-    `,
+`,
 
     success: `
         <section class="container">
@@ -784,18 +680,36 @@ function deleteApp(id) {
 }
 
 function switchTab(tabName) {
-    // Скрываем все разделы
-    document.querySelectorAll('.tab-content').forEach(tab => {
+    // 1. Скрываем абсолютно все вкладки
+    const allTabs = document.querySelectorAll('.tab-content');
+    allTabs.forEach(tab => {
         tab.style.display = 'none';
     });
-    // Убираем активный класс у кнопок
-    document.querySelectorAll('.step-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Показываем нужный раздел
+
+    // 2. Показываем только ту, которую нажали
+    const activeTab = document.getElementById('tab-' + tabName);
+    if (activeTab) {
+        activeTab.style.display = 'block';
+    }
+
+    // 3. Красим кнопки в навигации
+    document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('active'));
+    const activeBtn = document.getElementById('btn-' + tabName);
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
+}
+
+function switchTab(tabName) {
+    // Скрываем все вкладки
+    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+    // Показываем нужную
     document.getElementById('tab-' + tabName).style.display = 'block';
     
-    // Делаем кнопку активной (визуально)
-    // Можно добавить логику поиска кнопки по тексту, если нужно
+    // Обновляем вид кнопок навигации
+    document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('active'));
+    // Это сработает, если у кнопок есть ID как в коде выше
+    if(tabName === 'personal') document.getElementById('btn-personal').classList.add('active');
+    if(tabName === 'contact') document.getElementById('btn-contact').classList.add('active');
+    if(tabName === 'education') document.getElementById('btn-education').classList.add('active');
 }
